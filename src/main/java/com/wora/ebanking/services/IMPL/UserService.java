@@ -1,11 +1,16 @@
 package com.wora.ebanking.services.IMPL;
 
+import com.wora.ebanking.exceptions.EntityNotFoundException;
+import com.wora.ebanking.mappers.UserMapper;
+import com.wora.ebanking.models.DTOs.ChangePasswordDto;
 import com.wora.ebanking.models.DTOs.CreateUserDto;
-import com.wora.ebanking.models.DTOs.UpdateUserDtto;
+import com.wora.ebanking.models.DTOs.UpdateUserDto;
 import com.wora.ebanking.models.DTOs.UserDto;
+import com.wora.ebanking.models.entities.User;
 import com.wora.ebanking.repositoies.UserRepository;
 import com.wora.ebanking.services.INTER.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,20 +19,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto save(CreateUserDto createUserDto) {
-        return null;
+        User user = userMapper.toEntity(createUserDto);
+        User savedUser = userRepository.save(user);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
-    public UserDto findById(Long aLong) {
-        return null;
+    public UserDto findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", id));
+        return userMapper.toDto(user);
     }
 
     @Override
-    public UserDto update(UpdateUserDtto updateUserDtto, Long aLong) {
-        return null;
+    public UserDto update(UpdateUserDto updateUserDto, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", id));
+        user.setName(updateUserDto.name())
+                .setEmail(updateUserDto.email());
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -36,7 +51,21 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void delete(Long aLong) {
+    public void delete(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", id));
+        userRepository.delete(user);
+    }
 
+    @Override
+    public void changePassword(ChangePasswordDto changePasswordDto, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", id));
+        if (!passwordEncoder.matches(changePasswordDto.oldPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect.");
+        }
+        String encodedNewPassword = passwordEncoder.encode(changePasswordDto.newPassword());
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
     }
 }
