@@ -25,6 +25,8 @@ public class UserService implements IUserService {
     @Override
     public UserDto save(CreateUserDto createUserDto) {
         User user = userMapper.toEntity(createUserDto);
+        String encodedPassword = passwordEncoder.encode(createUserDto.password());
+        user.setPassword(encodedPassword);
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
     }
