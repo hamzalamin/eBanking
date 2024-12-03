@@ -15,14 +15,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("api/notices").permitAll()
-                .requestMatchers("api/card").hasRole("USER")
-                .requestMatchers("api/users").hasRole("ADMIN")
+                .requestMatchers("/api/notices").permitAll()
+                .requestMatchers("/api/card").hasRole("USER")
+                .requestMatchers("/api/users").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.init(http));
         return http.build();
     }
-
 
 }
