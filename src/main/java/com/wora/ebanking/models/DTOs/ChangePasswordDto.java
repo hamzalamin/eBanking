@@ -1,7 +1,9 @@
 package com.wora.ebanking.models.DTOs;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record ChangePasswordDto(
-        String oldPassword,
-        String newPassword
+        @NotBlank String oldPassword,
+        @NotBlank String newPassword
 ) {
 }

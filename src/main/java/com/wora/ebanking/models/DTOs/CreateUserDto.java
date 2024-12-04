@@ -1,8 +1,10 @@
 package com.wora.ebanking.models.DTOs;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record CreateUserDto(
-        String name,
-        String email,
-        String password
+        @NotBlank String name,
+        @NotBlank String email,
+        @NotBlank String password
 ) {
 }
