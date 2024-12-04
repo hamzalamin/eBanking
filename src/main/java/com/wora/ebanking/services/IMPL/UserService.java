@@ -7,8 +7,10 @@ import com.wora.ebanking.models.DTOs.ChangePasswordDto;
 import com.wora.ebanking.models.DTOs.CreateUserDto;
 import com.wora.ebanking.models.DTOs.UpdateUserDto;
 import com.wora.ebanking.models.DTOs.UserDto;
+import com.wora.ebanking.models.entities.Role;
 import com.wora.ebanking.models.entities.User;
 import com.wora.ebanking.repositoies.UserRepository;
+import com.wora.ebanking.services.INTER.IRoleService;
 import com.wora.ebanking.services.INTER.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,12 +24,15 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final IRoleService roleService;
 
     @Override
     public UserDto save(CreateUserDto createUserDto) {
         User user = userMapper.toEntity(createUserDto);
         String encodedPassword = passwordEncoder.encode(createUserDto.password());
         user.setPassword(encodedPassword);
+        Role role = roleService.defaultRole();
+        user.setRole(role);
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
     }
