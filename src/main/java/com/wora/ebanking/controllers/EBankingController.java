@@ -26,13 +26,18 @@ public class EBankingController {
         return new ResponseEntity<>(roleDto, HttpStatus.CREATED);
     }
 
-//    @GetMapping("/card")
-//    public String card(){
-//        return "your Card";
-//    }
-//
-//    @GetMapping("/users")
-//    public String users(){
-//        return "List of users";
-//    }
+    @GetMapping("/card")
+    public String card(){
+        return "your Card";
+    }
+
+    @GetMapping("/users")
+    public String users(){
+        return "List of users";
+    }
+
+    @GetMapping("/admin")
+    public String admin(){
+        return "im admin";
+    }
 }
