@@ -19,7 +19,7 @@ import java.util.List;
 public class UserController {
     private final IUserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserDto> createUser(@RequestBody @Valid CreateUserDto createUserDto) {
         UserDto savedUser = userService.save(createUserDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);

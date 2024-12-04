@@ -13,13 +13,13 @@ public class EBankingController {
         return "les annonces générales";
     }
 
-    @GetMapping("/card")
-    public String card(){
-        return "your Card";
-    }
-
-    @GetMapping("/users")
-    public String users(){
-        return "List of users";
-    }
+//    @GetMapping("/card")
+//    public String card(){
+//        return "your Card";
+//    }
+//
+//    @GetMapping("/users")
+//    public String users(){
+//        return "List of users";
+//    }
 }

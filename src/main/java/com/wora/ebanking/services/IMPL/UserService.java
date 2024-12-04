@@ -1,6 +1,7 @@
 package com.wora.ebanking.services.IMPL;
 
 import com.wora.ebanking.exceptions.EntityNotFoundException;
+import com.wora.ebanking.exceptions.PasswordIncorrect;
 import com.wora.ebanking.mappers.UserMapper;
 import com.wora.ebanking.models.DTOs.ChangePasswordDto;
 import com.wora.ebanking.models.DTOs.CreateUserDto;
@@ -64,7 +65,7 @@ public class UserService implements IUserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User", id));
         if (!passwordEncoder.matches(changePasswordDto.oldPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Old password is incorrect.");
+            throw new PasswordIncorrect("Old password is incorrect.");
         }
         String encodedNewPassword = passwordEncoder.encode(changePasswordDto.newPassword());
         user.setPassword(encodedNewPassword);
