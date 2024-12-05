@@ -1,8 +1,9 @@
 package com.wora.ebanking.controllers;
 
-import com.wora.ebanking.models.DTOs.CreateRoleDto;
-import com.wora.ebanking.models.DTOs.RoleDto;
-import com.wora.ebanking.services.INTER.IRoleService;
+import com.wora.ebanking.models.DTOs.CreateUserDto;
+import com.wora.ebanking.models.DTOs.UserDto;
+import com.wora.ebanking.services.INTER.IUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,31 +14,21 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EBankingController {
 
-    private final IRoleService roleService;
+    private final IUserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid CreateUserDto createUserDto) {
+        UserDto savedUser = userService.save(createUserDto);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
 
     @GetMapping("/notices")
     public String announce(){
         return "les annonces générales";
     }
 
-    @PostMapping("/role/create")
-    public ResponseEntity<RoleDto> createRole(@RequestBody CreateRoleDto createRoleDto) {
-        RoleDto roleDto = roleService.save(createRoleDto);
-        return new ResponseEntity<>(roleDto, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/card")
-    public String card(){
-        return "your Card";
-    }
-
-    @GetMapping("/users")
-    public String users(){
-        return "List of users";
-    }
-
-    @GetMapping("/admin")
-    public String admin(){
-        return "im admin";
+    @GetMapping("/contact")
+    public String contact(){
+        return "contact us";
     }
 }

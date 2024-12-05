@@ -19,37 +19,12 @@ import java.util.List;
 public class UserController {
     private final IUserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid CreateUserDto createUserDto) {
-        UserDto savedUser = userService.save(createUserDto);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findUserById(@PathVariable Long id) {
-        UserDto userDto = userService.findById(id);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UpdateUserDto updateUserDto, @PathVariable Long id) {
         UserDto updatedUser = userService.update(updateUserDto, id);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> findAllUsers(
-            @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "10") Integer size) {
-        List<UserDto> users = userService.findAll(pageNumber, size);
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        userService.delete(id);
-        return new ResponseEntity<>("USER WITH ID: " + id + " DELETED SUCCESSFULLY !!", HttpStatus.OK);
-    }
 
     @PutMapping("/{id}/change-password")
     public ResponseEntity<String> changePassword(
@@ -57,6 +32,27 @@ public class UserController {
             @PathVariable Long id) {
         userService.changePassword(changePasswordDto, id);
         return new ResponseEntity<>("Password changed successfully!", HttpStatus.OK);
+    }
+
+
+    @GetMapping("/myLoans")
+    public String myLoans(){
+        return "my Loans";
+    }
+
+    @GetMapping("/myCards")
+    public String myCards(){
+        return "my Cards";
+    }
+
+    @GetMapping("/myAccount")
+    public String myAccount(){
+        return "my Account";
+    }
+
+    @GetMapping("/myBalance")
+    public String myBalance(){
+        return "my Balance";
     }
 
 }
