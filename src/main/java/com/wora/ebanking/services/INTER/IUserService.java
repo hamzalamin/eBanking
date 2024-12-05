@@ -7,5 +7,5 @@ import com.wora.ebanking.models.DTOs.UserDto;
 import com.wora.ebanking.services.GenericService;
 
 public interface IUserService extends GenericService<CreateUserDto, UpdateUserDto, UserDto, Long> {
-    void changePassword(ChangePasswordDto changePasswordDto, Long id);
+    void changePassword(ChangePasswordDto changePasswordDto, String name);
 }

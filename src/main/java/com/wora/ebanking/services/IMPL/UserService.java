@@ -1,6 +1,7 @@
 package com.wora.ebanking.services.IMPL;
 
 import com.wora.ebanking.exceptions.EntityNotFoundException;
+import com.wora.ebanking.exceptions.OwnPasswordException;
 import com.wora.ebanking.exceptions.PasswordIncorrect;
 import com.wora.ebanking.mappers.UserMapper;
 import com.wora.ebanking.models.DTOs.ChangePasswordDto;
@@ -13,6 +14,8 @@ import com.wora.ebanking.repositoies.UserRepository;
 import com.wora.ebanking.services.INTER.IRoleService;
 import com.wora.ebanking.services.INTER.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -66,9 +69,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void changePassword(ChangePasswordDto changePasswordDto, Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User", id));
+    public void changePassword(ChangePasswordDto changePasswordDto, String name) {
+        User user = userRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("User", name));
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!authentication.getName().equals(name)) {
+            throw new OwnPasswordException("You can only change your own password");
+        }
+
         if (!passwordEncoder.matches(changePasswordDto.oldPassword(), user.getPassword())) {
             throw new PasswordIncorrect("Old password is incorrect.");
         }

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -25,13 +26,32 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> findUserById(@PathVariable Long id) {
+        UserDto userDto = userService.findById(id);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
 
-    @PutMapping("/{id}/change-password")
-    public ResponseEntity<String> changePassword(
-            @RequestBody @Valid ChangePasswordDto changePasswordDto,
-            @PathVariable Long id) {
-        userService.changePassword(changePasswordDto, id);
-        return new ResponseEntity<>("Password changed successfully!", HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+        return new ResponseEntity<>("USER WITH ID: " + id + " DELETED SUCCESSFULLY !!", HttpStatus.OK);
+    }
+
+    @PutMapping("/change-password/{name}")
+    public ResponseEntity<String> changePassword(@PathVariable String name,
+                                                 @RequestBody @Valid ChangePasswordDto changePasswordDto
+    ) {
+
+//        String authUserName = principal.getName();
+//        System.out.println("Authenticated username: " + authUserName);
+//
+//        if (!authUserName.equals(name)){
+//            throw new RuntimeException("hsahzszasza");
+//        }
+
+        userService.changePassword(changePasswordDto, name);
+        return new ResponseEntity<>("USER changed SUCCESSFULLY !!", HttpStatus.OK);
     }
 
 

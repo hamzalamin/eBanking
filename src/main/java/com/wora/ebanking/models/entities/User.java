@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String email;
     @NotBlank
     private String password;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -37,9 +37,8 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.getName()));
     }
-
     @Override
     public String getUsername() {
-        return email;
+        return name;
     }
 }

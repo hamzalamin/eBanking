@@ -29,17 +29,7 @@ public class AdminController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findUserById(@PathVariable Long id) {
-        UserDto userDto = userService.findById(id);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
-    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        userService.delete(id);
-        return new ResponseEntity<>("USER WITH ID: " + id + " DELETED SUCCESSFULLY !!", HttpStatus.OK);
-    }
 
     @PostMapping("/role/create")
     public ResponseEntity<RoleDto> createRole(@RequestBody CreateRoleDto createRoleDto) {
