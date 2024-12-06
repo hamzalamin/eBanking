@@ -60,7 +60,11 @@ This project focuses on creating a **secure eBanking REST API** using Spring Sec
 - DTO for structured error responses.
 - Enhanced logging for better debugging:
   ```properties
-  logging.level.org.springframework.security=TRACE  	
+  logging:
+    level:
+      org:
+        springframework:
+          security: DEBUG
   ```
 
 ## 🛠️ Technologies and Concepts
